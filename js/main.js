@@ -66,9 +66,18 @@
     requestAnimationFrame(loop);
   }
 
+  /* Das SVG skaliert mit dem Fenster (viewBox 1160x800, „meet“). Derselbe
+     Faktor geht an die CSS-Variable, damit der Zähler exakt so gross
+     erscheint wie die kleine Typo im Blatt. */
+  function fitScale() {
+    const s = Math.min(window.innerWidth / GF.CANVAS.W, window.innerHeight / GF.CANVAS.H);
+    document.documentElement.style.setProperty('--gf-scale', s);
+  }
+
   window.addEventListener('resize', function () {
     const n = GF.state.layouts.length;
     spacer.style.height = (n * window.innerHeight) + 'px';
+    fitScale();
   });
 
   /* Auf der Landing Page: T blendet die kleine Typo aus/ein */
@@ -90,6 +99,7 @@
      Fehlt sie, gilt die Vorlage aus assets.js. */
   function start() {
     GF.normalizeLayouts();
+    fitScale();
     document.fonts && document.fonts.ready.then(() => draw(true));
     L.resync();
     requestAnimationFrame(loop);

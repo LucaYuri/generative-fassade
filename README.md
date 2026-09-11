@@ -18,7 +18,9 @@ Dann im Browser: http://localhost:8765
 
 * Scrollen wechselt durch die Layouts — Position und Rotation werden animiert.
 * Pro Layout eine Bildschirmhöhe Scrollstrecke, mit kurzer Haltephase an jedem Layout.
-* Zähler oben rechts zeigt, wo man ist.
+* Zähler oben rechts zeigt, wo man ist — in derselben kleinen Typo wie die
+  Labels: Walbaum SemiBold, volles Schwarz, gleiche Grösse (er rechnet die
+  Skalierung des Blattes mit).
 * **T** blendet die kleine Typo (Labels, Adresse, Mail) aus und ein.
 
 ## Editor (versteckt)

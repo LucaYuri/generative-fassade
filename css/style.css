@@ -64,13 +64,16 @@ body.no-scroll{overflow:hidden}
 /* Scroll-Distanz */
 .scroll-spacer{position:relative; z-index:0; width:1px}
 
-/* Zähler */
+/* Zähler — dieselbe Schrift, dasselbe Schwarz und dieselbe Grösse wie die
+   kleine Typo auf der Fassade. Weil er als HTML über dem SVG liegt, muss er
+   dessen Skalierung nachrechnen: --gf-scale setzt main.js beim Resize. */
 .counter{
   position:fixed; right:22px; top:18px; z-index:5;
   font-family:"Walbaum", Georgia, serif;
-  font-size:12px; letter-spacing:.02em;
+  font-weight:600;
+  font-size:calc(13.5px * var(--gf-scale, 1));
   color:var(--ink);
-  opacity:.55;
+  opacity:1;
   pointer-events:none;
   transition:opacity .3s;
 }
