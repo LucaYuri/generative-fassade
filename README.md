@@ -21,6 +21,10 @@ Dann im Browser: http://localhost:8765
 * Zähler oben rechts zeigt, wo man ist — in derselben kleinen Typo wie die
   Labels: Walbaum SemiBold, volles Schwarz, gleiche Grösse (er rechnet die
   Skalierung des Blattes mit).
+* **i** darunter blendet die Vorlage ein — das Foto der echten Fassade
+  (`Assets/fenster_vorlage.webp`, 20 vw breit, direkt unter dem Buchstaben).
+  Ein Klick daneben, Scrollen oder ESC nimmt es wieder weg; auf das Bild
+  selbst darf man klicken. Im Editor ist die ganze Ecke ausgeblendet.
 * **T** blendet die kleine Typo (Labels, Adresse, Mail) aus und ein.
 
 ## Editor (versteckt)

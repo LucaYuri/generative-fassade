@@ -6,6 +6,8 @@
   const counter = document.getElementById('counter');
   const cCur = document.getElementById('counter-cur');
   const cMax = document.getElementById('counter-max');
+  const infoBtn = document.getElementById('info-btn');
+  const infoFig = document.getElementById('info-fig');
 
   let target = 0;      // Scroll-Position als Layout-Index (float)
   let smooth = 0;      // nachlaufender Wert -> weiche Bewegung
@@ -78,6 +80,34 @@
     const n = GF.state.layouts.length;
     spacer.style.height = (n * window.innerHeight) + 'px';
     fitScale();
+  });
+
+  /* ---------- „i“: die Vorlage einblenden ----------
+     Sie bleibt nur stehen, solange man sie anschaut — ein Klick daneben,
+     Scrollen oder ESC nimmt sie wieder weg. */
+  function showInfo(on) {
+    infoFig.hidden = !on;
+    infoBtn.setAttribute('aria-expanded', on ? 'true' : 'false');
+  }
+
+  infoBtn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    showInfo(infoFig.hidden);
+  });
+
+  document.addEventListener('pointerdown', function (e) {
+    if (infoFig.hidden) return;
+    if (e.target === infoBtn || infoFig.contains(e.target)) return;   // aufs Bild darf man klicken
+    showInfo(false);
+  });
+
+  window.addEventListener('scroll', function () {
+    if (!infoFig.hidden) showInfo(false);
+  }, { passive: true });
+
+  window.addEventListener('keydown', function (e) {
+    if (infoFig.hidden) return;
+    if (e.key === 'Escape' || e.key === 'e' || e.key === 'E') showInfo(false);
   });
 
   /* Auf der Landing Page: T blendet die kleine Typo aus/ein */

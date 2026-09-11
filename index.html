@@ -19,8 +19,16 @@
     </svg>
   </div>
 
-  <!-- Zähler unten rechts -->
-  <div class="counter" id="counter"><span id="counter-cur">01</span> / <span id="counter-max">01</span></div>
+  <!-- Zähler oben rechts, darunter das „i“: blendet die Vorlage ein -->
+  <div class="hud" id="hud">
+    <div class="counter" id="counter"><span id="counter-cur">01</span> / <span id="counter-max">01</span></div>
+    <button class="info-btn" id="info-btn" type="button" aria-expanded="false" aria-controls="info-fig"
+            title="Vorlage einblenden">i</button>
+    <figure class="info-fig" id="info-fig" hidden>
+      <img src="Assets/fenster_vorlage.webp" width="680" height="453"
+           alt="Ladenfassade des Büro Spreng: zwei Schaufenster mit Plakaten, Tür, Velo und rote Bank">
+    </figure>
+  </div>
 
   <!-- Scroll-Distanz: 100vh pro Layout -->
   <div class="scroll-spacer" id="spacer"></div>
