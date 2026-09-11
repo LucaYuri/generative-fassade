@@ -1,0 +1,93 @@
+{
+  "layouts": [
+    {
+      "id": "vorlage",
+      "name": "Vorlage",
+      "els": [
+        {
+          "id": "f1",
+          "type": "fenster_1",
+          "x": 52,
+          "y": 27,
+          "rot": 0
+        },
+        {
+          "id": "tu",
+          "type": "tuer",
+          "x": 317,
+          "y": 27,
+          "rot": 0
+        },
+        {
+          "id": "f2",
+          "type": "fenster_2",
+          "x": 460,
+          "y": 27,
+          "rot": 0,
+          "cap": "Das Büro Spreng",
+          "capOff": [
+            234,
+            75
+          ]
+        },
+        {
+          "id": "ve",
+          "type": "velo",
+          "x": 8,
+          "y": 388,
+          "rot": 0,
+          "cap": "Irgendein Velo",
+          "capOff": [
+            195,
+            99
+          ]
+        },
+        {
+          "id": "rb",
+          "type": "rotebank",
+          "x": 484,
+          "y": 386,
+          "rot": 0,
+          "cap": "Rote Bank",
+          "capOff": [
+            263,
+            67
+          ]
+        },
+        {
+          "id": "ad",
+          "type": "text",
+          "x": 980,
+          "y": 434,
+          "rot": 0,
+          "style": "small",
+          "text": "Birsigstrasse 90\nCH-4054 Basel"
+        },
+        {
+          "id": "em",
+          "type": "text",
+          "x": 980,
+          "y": 563,
+          "rot": 0,
+          "style": "small",
+          "text": "spreng@buerospreng.ch"
+        },
+        {
+          "id": "hd",
+          "type": "text",
+          "x": 24,
+          "y": 737,
+          "rot": 0,
+          "style": "head",
+          "size": 115,
+          "text": "Rahmen gesprengt."
+        }
+      ]
+    }
+  ],
+  "showSmallType": true,
+  "showGrid": false,
+  "grid": 10,
+  "snap": false,
+  "rotSnap": false
+}
