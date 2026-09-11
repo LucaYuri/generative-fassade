@@ -41,6 +41,7 @@
         el.x = GF.FIXED[id].x;
         el.y = GF.FIXED[id].y;
         el.rot = 0;
+        if (GF.FIXED[id].size != null) el.size = GF.FIXED[id].size;
       });
       L.els.sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
     });
@@ -186,7 +187,7 @@
       id: GF.uid('l'),
       name: 'Layout ' + String(GF.state.layouts.length + 1).padStart(2, '0'),
       els: [{ id: 'hd', type: 'text', x: GF.FIXED.hd.x, y: GF.FIXED.hd.y, rot: 0,
-              style: 'head', size: 115, text: 'Rahmen gesprengt.' }]
+              style: 'head', size: GF.FIXED.hd.size, text: 'Rahmen gesprengt.' }]
     };
   };
 })();

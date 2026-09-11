@@ -77,7 +77,7 @@ GF.textMetrics = function (el) {
    „g“ reicht 39 px darunter, darum sitzt die Grundlinie auf 737 und nicht
    weiter unten: sonst schneidet der Blattrand sie ab. */
 GF.FIXED = {
-  hd: { x: 24, y: 737 }
+  hd: { x: 24, y: 737, size: 126.5 }
 };
 GF.isFixed = function (id) { return Object.prototype.hasOwnProperty.call(GF.FIXED, id); };
 
@@ -123,7 +123,7 @@ GF.defaultLayout = function () {
       { id: 'ad', type: 'text', x: 980, y: 434, rot: 0, style: 'small', text: 'Birsigstrasse 90\nCH-4054 Basel' },
       { id: 'em', type: 'text', x: 980, y: 563, rot: 0, style: 'small', text: 'spreng@buerospreng.ch' },
       { id: 'hd', type: 'text', x: GF.FIXED.hd.x, y: GF.FIXED.hd.y, rot: 0,
-        style: 'head', size: 115, text: 'Rahmen gesprengt.' }
+        style: 'head', size: GF.FIXED.hd.size, text: 'Rahmen gesprengt.' }
     ]
   };
 };
