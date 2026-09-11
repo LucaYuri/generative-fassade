@@ -1,0 +1,217 @@
+/* ---------- Fonts ---------- */
+@font-face{
+  font-family:"ABC Favorit Edu";
+  src:url("../fonts/ABCFavoritEdu-Black.otf") format("opentype");
+  font-weight:900; font-style:normal; font-display:block;
+}
+@font-face{
+  font-family:"Walbaum";
+  src:url("../fonts/Walbaum12pt-SemiBold.otf") format("opentype");
+  font-weight:600; font-style:normal; font-display:block;
+}
+
+/* ---------- Basis ---------- */
+:root{
+  --ink:#000;
+  --paper:#fff;
+  --ui:"Helvetica Neue", Helvetica, Arial, sans-serif;
+  --line:#000;
+  --sbw:0px;          /* Breite der Scrollbar, im Editor gemessen */
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+html{scroll-behavior:auto}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--ui);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+body.no-scroll{overflow:hidden}
+
+/* ---------- Bühne ---------- */
+.stage{
+  position:fixed; inset:0;
+  display:block;
+  z-index:1;
+  background:var(--paper);
+}
+#facade{width:100%; height:100%; display:block}
+
+.el{ }
+.el .body path{fill:var(--ink)}
+.cap{
+  font-family:"Walbaum", Georgia, serif;
+  font-weight:600;
+  font-size:13.5px;
+  fill:var(--ink);
+  white-space:pre;
+}
+.txt-small{
+  font-family:"Walbaum", Georgia, serif;
+  font-weight:600;
+  font-size:13.5px;
+  fill:var(--ink);
+}
+.txt-head{
+  font-family:"ABC Favorit Edu", "Helvetica Neue", Arial, sans-serif;
+  font-weight:900;
+  fill:var(--ink);
+  letter-spacing:-0.012em;
+}
+
+/* Scroll-Distanz */
+.scroll-spacer{position:relative; z-index:0; width:1px}
+
+/* Zähler */
+.counter{
+  position:fixed; right:22px; top:18px; z-index:5;
+  font-family:"Walbaum", Georgia, serif;
+  font-size:12px; letter-spacing:.02em;
+  color:var(--ink);
+  opacity:.55;
+  pointer-events:none;
+  transition:opacity .3s;
+}
+.counter.hide{opacity:0}
+
+/* ---------- Editor ---------- */
+.editor{
+  position:fixed; inset:0; z-index:20;
+  pointer-events:none;
+  font-family:var(--ui);
+  font-size:10.5px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+.editor > *{pointer-events:auto}
+
+/* Die Bühne bleibt im Editor exakt so gross wie auf der Seite selbst —
+   damit lässt sich bis an den Rand des Blattes arbeiten. Beim Öffnen fällt
+   die Scrollbar weg; um genau deren Breite wird die Bühne schmaler gehalten,
+   sonst skaliert das SVG neu und die ganze Fassade rutscht. */
+body.edit-mode .stage{right:var(--sbw)}
+
+/* Eine einzige Spalte rechts */
+.ed-panel{
+  position:absolute; top:10px; right:calc(10px + var(--sbw)); bottom:10px;
+  width:236px;
+  background:var(--paper);
+  border:1px solid var(--line);
+  padding:9px;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+}
+.editor.ui-hidden .ed-panel{display:none}
+
+.ed-top{
+  display:flex; align-items:flex-start; justify-content:space-between;
+  gap:8px; margin-bottom:12px;
+}
+.ed-title{font-weight:700; letter-spacing:.12em; line-height:1.5}
+.ed-dim{opacity:.4; font-weight:400}
+
+/* Knopf zum Wiedereinblenden */
+.ed-peek{
+  position:absolute; top:10px; right:calc(10px + var(--sbw));
+  font:inherit; text-transform:inherit; letter-spacing:inherit;
+  background:var(--paper); color:var(--ink);
+  border:1px solid var(--line); padding:4px 8px; cursor:pointer;
+  display:none;
+}
+.editor.ui-hidden .ed-peek{display:block}
+.ed-peek:hover{background:var(--ink); color:var(--paper)}
+
+.ed-head{
+  font-weight:700; letter-spacing:.14em;
+  border-bottom:1px solid var(--line);
+  padding-bottom:5px; margin-bottom:8px;
+}
+.ed-head-sep{margin-top:16px}
+.ed-row{margin-bottom:5px}
+.ed-row-close{margin-top:16px}
+.ed-note{
+  text-transform:none; letter-spacing:0; font-size:10px;
+  line-height:1.45; opacity:.5; margin:8px 0 0;
+}
+
+.btn{
+  font:inherit; text-transform:inherit; letter-spacing:inherit;
+  background:var(--paper); color:var(--ink);
+  border:1px solid var(--line);
+  padding:4px 8px; cursor:pointer; line-height:1.4;
+}
+.btn:hover{background:var(--ink); color:var(--paper)}
+.btn.wide{display:block; width:100%; text-align:left}
+.btn[disabled]{opacity:.28; cursor:default}
+.btn[disabled]:hover{background:var(--paper); color:var(--ink)}
+.btn.on{background:var(--ink); color:var(--paper)}
+.btn-strong{font-weight:700}
+.btn.sm{padding:2px 5px}
+
+/* Layout-Liste */
+.lay-list{list-style:none; margin:0 0 8px; padding:0}
+.lay-item{
+  display:flex; align-items:center; gap:4px;
+  border:1px solid var(--line); margin-bottom:4px; padding:3px 4px;
+}
+.lay-item.active{background:var(--ink); color:var(--paper)}
+.lay-item.active .btn{background:transparent; color:var(--paper); border-color:var(--paper)}
+.lay-item.active .btn:hover{background:var(--paper); color:var(--ink)}
+.lay-idx{font-variant-numeric:tabular-nums; opacity:.6; min-width:16px}
+.lay-name{
+  flex:1; min-width:0; background:transparent; border:0; color:inherit;
+  font:inherit; text-transform:none; letter-spacing:.02em; padding:1px 2px;
+  outline:none; overflow:hidden; text-overflow:ellipsis;
+}
+.lay-name:focus{background:var(--paper); color:var(--ink)}
+
+/* Inspector */
+.insp{display:flex; flex-direction:column; gap:6px}
+.insp .field{display:flex; align-items:center; gap:6px}
+.insp label{min-width:34px; opacity:.55}
+.insp input[type=number], .insp input[type=text]{
+  flex:1; min-width:0; font:inherit; text-transform:none; letter-spacing:.02em;
+  border:1px solid var(--line); background:var(--paper); color:var(--ink);
+  padding:3px 4px; outline:none;
+}
+.insp .grp{display:flex; gap:4px}
+.insp .empty{text-transform:none; letter-spacing:0; opacity:.45; line-height:1.5; font-size:10px}
+.insp .kind{font-weight:700; letter-spacing:.12em; margin-bottom:2px}
+
+.palette{display:flex; flex-wrap:wrap; gap:4px}
+.palette .btn{flex:1 1 auto}
+
+/* Tastenliste */
+.ed-keys{
+  display:grid; grid-template-columns:auto 1fr; gap:3px 8px;
+  margin:18px 0 0; padding:9px 0 0;
+  border-top:1px solid var(--line);
+  text-transform:none; letter-spacing:.02em; font-size:10px;
+}
+.ed-keys dt{font-weight:700; letter-spacing:.06em}
+.ed-keys dd{margin:0; opacity:.55}
+
+/* Editor-Overlays im SVG */
+.sel-box{fill:none; stroke:#000; stroke-width:1; vector-effect:non-scaling-stroke; stroke-dasharray:3 3}
+.sel-dot{fill:#000}
+/* Klammer um eine Mehrfachauswahl — sie ist auch die Achse beim Drehen */
+.sel-group{fill:none; stroke:#000; stroke-width:1; vector-effect:non-scaling-stroke; stroke-dasharray:1 4}
+/* Aufgezogenes Auswahlfeld */
+.marquee{fill:#000; fill-opacity:.05; stroke:#000; stroke-width:1;
+  vector-effect:non-scaling-stroke; stroke-dasharray:3 3; pointer-events:none}
+.hit{fill:transparent; stroke:transparent}
+/* auf der freien Fläche lässt sich ein Auswahlfeld aufziehen */
+body.edit-mode .stage{cursor:crosshair}
+body.edit-mode .el{cursor:move}
+body.edit-mode .el.locked{cursor:default; pointer-events:none}
+body.edit-mode .cap{cursor:move}
+.grid-line{stroke:#000; stroke-width:.5; opacity:.10; vector-effect:non-scaling-stroke}
+.grid-line.major{opacity:.22}
+.frame{fill:none; stroke:#000; stroke-width:1; opacity:.35; vector-effect:non-scaling-stroke}
+.guide{stroke:#e10600; stroke-width:1; vector-effect:non-scaling-stroke; pointer-events:none}
+
+@media (max-width:900px){
+  .ed-panel{width:196px}
+}

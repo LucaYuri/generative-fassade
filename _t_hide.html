@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rahmen gesprengt. — Generative Fassade</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Bühne: die Fassade, immer bildschirmfüllend, fix -->
+  <div class="stage" id="stage">
+    <svg id="facade" viewBox="0 0 1160 800" preserveAspectRatio="xMidYMid meet" aria-label="Generative Fassade">
+      <g id="layer-grid"></g>
+      <g id="layer-els"></g>
+      <g id="layer-ui"></g>
+    </svg>
+  </div>
+
+  <!-- Zähler unten rechts -->
+  <div class="counter" id="counter"><span id="counter-cur">01</span> / <span id="counter-max">01</span></div>
+
+  <!-- Scroll-Distanz: 100vh pro Layout -->
+  <div class="scroll-spacer" id="spacer"></div>
+
+  <!-- Editor (versteckt, Taste E) — gesamte Bedienung in einer Spalte rechts -->
+  <div class="editor" id="editor" hidden>
+
+    <button class="ed-peek" data-act="show-ui" title="Bedienung einblenden (H)">‹</button>
+
+    <aside class="ed-panel" id="ed-panel">
+
+      <header class="ed-top">
+        <div class="ed-title">Generative&nbsp;Fassade<br><span class="ed-dim">Editor</span></div>
+        <button class="btn sm" data-act="hide-ui" title="Bedienung ausblenden (H)">›</button>
+      </header>
+
+      <div class="ed-head">Element</div>
+      <div id="insp" class="insp"></div>
+
+      <div class="ed-head ed-head-sep">Hinzufügen</div>
+      <div class="palette" id="palette"></div>
+
+      <div class="ed-head ed-head-sep">Layouts</div>
+      <ol class="lay-list" id="lay-list"></ol>
+      <div class="ed-row"><button data-act="layout-new" class="btn wide">+ Leeres Layout</button></div>
+      <div class="ed-row"><button data-act="layout-dup" class="btn wide">⧉ Duplizieren</button></div>
+
+      <div class="ed-head ed-head-sep">Generativ</div>
+      <div class="ed-row"><button data-act="gen-one" class="btn wide">⚡ Layout generieren</button></div>
+      <div class="ed-row"><button data-act="gen-three" class="btn wide">⚡ 3 Layouts generieren</button></div>
+      <p class="ed-note">Zufällige Position + Rotation in 90°-Schritten, Raster 4&nbsp;px, kollisionsfrei.</p>
+
+      <div class="ed-head ed-head-sep">Ansicht</div>
+      <div class="ed-row"><button data-act="toggle-small" class="btn wide" id="btn-small">Kleine Typo</button></div>
+      <div class="ed-row"><button data-act="toggle-grid" class="btn wide" id="btn-grid">Raster</button></div>
+      <div class="ed-row"><button data-act="toggle-rot" class="btn wide" id="btn-rot">Rotation schalten</button></div>
+
+      <div class="ed-head ed-head-sep">Datei</div>
+      <div class="ed-row"><button data-act="export" class="btn wide">Export</button></div>
+      <div class="ed-row"><button data-act="import" class="btn wide">Import</button></div>
+      <div class="ed-row"><button data-act="reset" class="btn wide">Zurücksetzen</button></div>
+
+      <div class="ed-row ed-row-close"><button data-act="close" class="btn wide btn-strong">Schliessen&nbsp;ESC</button></div>
+
+      <dl class="ed-keys">
+        <dt>Drag</dt><dd>verschieben</dd>
+        <dt>⌥</dt><dd>ohne Ausrichten</dd>
+        <dt>R / ⇧R</dt><dd>90° drehen</dd>
+        <dt>Pfeile</dt><dd>1&nbsp;px · ⇧ 10&nbsp;px</dd>
+        <dt>⌫</dt><dd>löschen</dd>
+        <dt>G</dt><dd>Raster</dd>
+        <dt>T</dt><dd>kleine Typo</dd>
+        <dt>H</dt><dd>Bedienung aus</dd>
+        <dt>ESC</dt><dd>zurück zur Seite</dd>
+      </dl>
+
+    </aside>
+
+    <input type="file" id="file-in" accept="application/json" hidden>
+  </div>
+
+<script src="js/assets.js"></script>
+<script src="js/state.js"></script>
+<script>
+window.__seed = function(){
+  GF.state.layouts = [GF.defaultLayout()];
+  GF.addGenerated(2);
+  GF.save = function(){}; GF.load = function(){ return true; };
+};
+</script>
+<script>__seed();</script>
+<script src="js/render.js"></script>
+<script src="js/editor.js"></script>
+<script src="js/main.js"></script>
+<script>GF.editor.enter();document.getElementById("editor").classList.add("ui-hidden");</script>
+</body>
+</html>
