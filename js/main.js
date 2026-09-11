@@ -9,55 +9,91 @@
   const infoBtn = document.getElementById('info-btn');
   const infoFig = document.getElementById('info-fig');
 
-  let target = 0;      // Scroll-Position als Layout-Index (float)
+  let target = 0;      // Position in der Schlaufe, 0..n (Layout-Index als Kommazahl)
   let smooth = 0;      // nachlaufender Wert -> weiche Bewegung
   let lastKey = '';
 
+  /* Die Seite ist eine Schlaufe. Dafür liegt oben und unten je ein Bildschirm
+     Reserve (PAD). Verlässt die Position die Runde um mehr als SLACK, wird die
+     Scrollposition um genau eine Runde versetzt — unsichtbar, weil Anfang und
+     Ende derselbe Zustand sind. Der Rest der Reserve ist Luft, damit ein
+     schneller Wisch nicht vorher an den Anschlag des Dokuments läuft. */
+  const PAD = 1;
+  const SLACK = 0.5;
+
   const L = GF.landing = {};
 
+  const count = () => GF.state.layouts.length;
+  const vh = () => Math.max(1, window.innerHeight);
+  const looping = () => count() > 1;
+  const band = () => ({ lo: PAD * vh(), hi: (count() + PAD) * vh() });
+  const slack = () => SLACK * vh();
+
   L.resync = function () {
-    const n = GF.state.layouts.length;
-    spacer.style.height = (n * window.innerHeight) + 'px';
+    const n = count();
+    spacer.style.height = ((looping() ? n + 2 * PAD + 1 : 1) * vh()) + 'px';
     cMax.textContent = String(n).padStart(2, '0');
     counter.style.display = n > 1 ? '' : 'none';
     GF.invalidate();
+    inBand();
     read();
     smooth = target;
     draw(true);
   };
 
-  /* Direkt zu einer Position springen (Index als Kommazahl) */
-  L.goto = function (v) {
-    const n = GF.state.layouts.length;
-    smooth = target = Math.max(0, Math.min(n - 1, v));
-    window.scrollTo(0, smooth * window.innerHeight);
-    draw(true);
+  /* Der nächstgelegene Layout-Index — auch der Editor fragt danach */
+  L.index = function () {
+    const n = count();
+    return ((Math.round(smooth) % n) + n) % n;
   };
 
+  /* Ohne Animation an ein Layout springen */
+  L.scrollToIndex = function (i) {
+    window.scrollTo(0, (i + (looping() ? PAD : 0)) * vh());
+  };
+
+  /* Beim Start und nach Grössenänderungen: in die Bahn holen, ohne zu wickeln */
+  function inBand() {
+    if (!looping()) return;
+    const b = band();
+    if (window.scrollY < b.lo) window.scrollTo(0, b.lo);
+    else if (window.scrollY > b.hi) window.scrollTo(0, b.hi);
+  }
+
+  /* Läuft man in die Reserve, eine ganze Runde versetzen */
+  function wrap() {
+    if (!looping()) return;
+    const b = band(), span = count() * vh(), sl = slack();
+    let sy = window.scrollY, d = 0;
+    while (sy > b.hi + sl) { sy -= span; d -= count(); }
+    while (sy < b.lo - sl) { sy += span; d += count(); }
+    if (d) { window.scrollTo(0, sy); smooth += d; }
+  }
+
   function read() {
-    const n = GF.state.layouts.length;
-    const p = window.scrollY / Math.max(1, window.innerHeight);
-    target = Math.max(0, Math.min(n - 1, p));
+    if (!looping()) { target = 0; return; }
+    target = window.scrollY / vh() - PAD;
   }
 
   function draw(force) {
-    const n = GF.state.layouts.length;
-    const i = Math.min(n - 1, Math.floor(smooth));
-    const raw = smooth - i;
-    const t = GF.shape(raw);
+    const n = count();
+    const u = ((smooth % n) + n) % n;          // 0..n, zyklisch
+    const i = Math.min(n - 1, Math.floor(u));
+    const t = GF.shape(u - i);
 
     const A = GF.state.layouts[i];
-    const B = GF.state.layouts[i + 1] || null;
+    const B = looping() ? GF.state.layouts[(i + 1) % n] : null;
 
     GF.render(GF.mix(A, B, B ? t : 0));
 
-    const cur = Math.min(n, Math.round(smooth) + 1);
+    const cur = (Math.round(u) % n) + 1;
     const key = String(cur);
     if (key !== lastKey) { cCur.textContent = key.padStart(2, '0'); lastKey = key; }
   }
 
   function loop() {
     if (!GF.editor.open) {
+      wrap();
       read();
       const d = target - smooth;
       if (Math.abs(d) > 0.0002) {
@@ -77,8 +113,10 @@
   }
 
   window.addEventListener('resize', function () {
-    const n = GF.state.layouts.length;
-    spacer.style.height = (n * window.innerHeight) + 'px';
+    const at = smooth;        // Position merken: eine Grössenänderung soll nicht
+    spacer.style.height = ((looping() ? count() + 2 * PAD + 1 : 1) * vh()) + 'px';
+    if (looping()) window.scrollTo(0, (at + PAD) * vh());   // aufs andere Layout rutschen
+    inBand();
     fitScale();
   });
 
@@ -89,15 +127,23 @@
   let clickGoal = null, clickAt = 0;
 
   L.next = function () {
-    const n = GF.state.layouts.length;
+    const n = count();
     if (n < 2) return;
     const now = performance.now();
     // schnelle Klicks hintereinander sollen weiterzählen, nicht stehenbleiben
-    const from = (clickGoal != null && now - clickAt < 900) ? clickGoal : Math.round(target);
-    const to = (from + 1) % n;
+    const from = (clickGoal != null && now - clickAt < 900) ? clickGoal : Math.round(smooth);
+    let to = from + 1;
+    if (to > n) {
+      // über die Naht hinaus: vorher eine Runde zurücksetzen (unsichtbar,
+      // die Position landet dabei innerhalb der Reserve)
+      window.scrollTo(0, window.scrollY - n * vh());
+      smooth -= n;
+      to -= n;
+      clickGoal = null;
+    }
     clickGoal = to;
     clickAt = now;
-    window.scrollTo({ top: to * window.innerHeight, behavior: 'smooth' });
+    window.scrollTo({ top: (to + PAD) * vh(), behavior: 'smooth' });
   };
 
   document.addEventListener('click', function (e) {
@@ -135,7 +181,7 @@
 
   window.addEventListener('keydown', function (e) {
     if (infoFig.hidden) return;
-    if (e.key === 'Escape' || e.key === 'e' || e.key === 'E') showInfo(false);
+    if (e.key === 'Escape') showInfo(false);
   });
 
   /* Auf der Landing Page: T blendet die kleine Typo aus/ein */
@@ -158,12 +204,17 @@
   function start() {
     GF.normalizeLayouts();
     fitScale();
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
     document.fonts && document.fonts.ready.then(() => draw(true));
     L.resync();
     requestAnimationFrame(loop);
 
-    // #edit im URL öffnet den Editor direkt (praktisch zum Verlinken)
+    // #edit im URL öffnet den Editor — der einzige Weg hinein
     if (location.hash === '#edit') GF.editor.enter();
+    window.addEventListener('hashchange', function () {
+      if (location.hash === '#edit') GF.editor.enter();
+    });
   }
 
   if (GF.load()) {

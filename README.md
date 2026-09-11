@@ -17,8 +17,13 @@ Dann im Browser: http://localhost:8765
 ## Landing Page
 
 * Scrollen wechselt durch die Layouts — Position und Rotation werden animiert.
+  Es ist eine **Schlaufe**: nach dem letzten Layout geht es weiter zum ersten,
+  in beide Richtungen, ohne Anschlag. Dafür liegt oben und unten je ein halber
+  Bildschirm Reserve; läuft man hinein, wird die Scrollposition um eine ganze
+  Runde versetzt — unsichtbar, weil Anfang und Ende derselbe Zustand sind.
 * **Mausklick** blättert direkt zum nächsten Layout, mit derselben Animation;
-  nach dem letzten geht es zurück auf das erste. Technisch wird nur an die
+  nach dem letzten weiter aufs erste. Der Zeigefinger-Cursor auf der ganzen
+  Seite zeigt an, dass geklickt werden darf. Technisch wird nur an die
   Scrollposition des nächsten Layouts gefahren — die Animation ist dieselbe
   Mechanik wie beim Scrollen. Klicks auf das „i“ und auf die Vorlage blättern
   nicht, und ein Klick, der die Vorlage wegnimmt, auch nicht.
@@ -34,10 +39,12 @@ Dann im Browser: http://localhost:8765
 
 ## Editor (versteckt)
 
-* **E** öffnet den Editor, **ESC** schliesst ihn wieder. Das Bild bleibt dabei
-  stehen: der Editor übernimmt das Layout, das gerade auf dem Schirm ist, und
-  die wegfallende Scrollbar wird ausgeglichen — es verschiebt sich nichts.
-* Direktlink: `index.html#edit`
+* Der Editor ist **nur über die Adresse** erreichbar: `index.html#edit`.
+  Über die Tastatur geht er nicht auf — Besucher der Seite sollen nicht
+  aus Versehen hineingeraten.
+* **ESC** schliesst ihn wieder. Das Bild bleibt dabei stehen: der Editor
+  übernimmt das Layout, das gerade auf dem Schirm ist, und die wegfallende
+  Scrollbar wird ausgeglichen — es verschiebt sich nichts.
 
 **Layouts** (linke Palette)
 

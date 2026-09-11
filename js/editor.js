@@ -1,5 +1,5 @@
 /* =========================================================
-   editor.js — versteckter Editor (Taste E, zurück mit ESC)
+   editor.js — versteckter Editor (nur über #edit, zurück mit ESC)
    ========================================================= */
 (function () {
   const dom = {
@@ -66,8 +66,7 @@
     ED.open = true;
     /* Der Editor öffnet das Layout, das gerade auf dem Schirm steht —
        sonst springt die Fassade beim Öffnen auf Layout 01 zurück. */
-    const n = GF.state.layouts.length;
-    ED.index = Math.max(0, Math.min(n - 1, Math.round(window.scrollY / Math.max(1, window.innerHeight))));
+    ED.index = Math.min(GF.state.layouts.length - 1, GF.landing.index());
     dom.editor.hidden = false;
     dom.editor.classList.remove('ui-hidden');
     lockScroll(true);
@@ -88,7 +87,7 @@
     GF.drawGrid(false);
     drawSelection();
     GF.save();
-    window.scrollTo(0, ED.index * window.innerHeight);
+    GF.landing.scrollToIndex(ED.index);
     GF.landing.resync();
   };
 
@@ -722,10 +721,8 @@
   window.addEventListener('keydown', function (e) {
     const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName);
 
-    if (!ED.open) {
-      if (!typing && (e.key === 'e' || e.key === 'E')) { e.preventDefault(); ED.enter(); }
-      return;
-    }
+    // Der Editor ist nicht über die Tastatur erreichbar — nur über #edit.
+    if (!ED.open) return;
 
     if (e.key === 'Escape') {
       e.preventDefault();

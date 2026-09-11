@@ -29,6 +29,9 @@ body{
   overflow-x:hidden;
 }
 body.no-scroll{overflow:hidden}
+/* Die ganze Seite blättert auf Klick weiter — also überall der Zeigefinger */
+body{cursor:pointer}
+body.edit-mode{cursor:default}
 
 /* ---------- Bühne ---------- */
 .stage{
