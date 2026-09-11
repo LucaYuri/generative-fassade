@@ -82,6 +82,31 @@
     fitScale();
   });
 
+  /* ---------- Klick blättert weiter ----------
+     Nicht selber animieren: es wird an die Scrollposition des nächsten
+     Layouts gefahren, den Rest macht dieselbe Mechanik wie beim Scrollen.
+     Nach dem letzten Layout geht es zurück auf das erste. */
+  let clickGoal = null, clickAt = 0;
+
+  L.next = function () {
+    const n = GF.state.layouts.length;
+    if (n < 2) return;
+    const now = performance.now();
+    // schnelle Klicks hintereinander sollen weiterzählen, nicht stehenbleiben
+    const from = (clickGoal != null && now - clickAt < 900) ? clickGoal : Math.round(target);
+    const to = (from + 1) % n;
+    clickGoal = to;
+    clickAt = now;
+    window.scrollTo({ top: to * window.innerHeight, behavior: 'smooth' });
+  };
+
+  document.addEventListener('click', function (e) {
+    if (GF.editor.open) return;
+    if (e.target.closest && e.target.closest('#hud')) return;   // „i“ und Vorlage
+    if (infoJustClosed) { infoJustClosed = false; return; }     // der Klick hat nur das Bild weggenommen
+    L.next();
+  });
+
   /* ---------- „i“: die Vorlage einblenden ----------
      Sie bleibt nur stehen, solange man sie anschaut — ein Klick daneben,
      Scrollen oder ESC nimmt sie wieder weg. */
@@ -95,10 +120,13 @@
     showInfo(infoFig.hidden);
   });
 
+  let infoJustClosed = false;
+
   document.addEventListener('pointerdown', function (e) {
     if (infoFig.hidden) return;
     if (e.target === infoBtn || infoFig.contains(e.target)) return;   // aufs Bild darf man klicken
     showInfo(false);
+    infoJustClosed = true;
   });
 
   window.addEventListener('scroll', function () {

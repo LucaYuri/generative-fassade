@@ -17,6 +17,11 @@ Dann im Browser: http://localhost:8765
 ## Landing Page
 
 * Scrollen wechselt durch die Layouts — Position und Rotation werden animiert.
+* **Mausklick** blättert direkt zum nächsten Layout, mit derselben Animation;
+  nach dem letzten geht es zurück auf das erste. Technisch wird nur an die
+  Scrollposition des nächsten Layouts gefahren — die Animation ist dieselbe
+  Mechanik wie beim Scrollen. Klicks auf das „i“ und auf die Vorlage blättern
+  nicht, und ein Klick, der die Vorlage wegnimmt, auch nicht.
 * Pro Layout eine Bildschirmhöhe Scrollstrecke, mit kurzer Haltephase an jedem Layout.
 * Zähler oben rechts zeigt, wo man ist — in derselben kleinen Typo wie die
   Labels: Walbaum SemiBold, volles Schwarz, gleiche Grösse (er rechnet die
