@@ -8,9 +8,11 @@
 </head>
 <body>
 
-  <!-- Bühne: die Fassade, immer bildschirmfüllend, fix -->
+  <!-- Bühne: die Fassade, immer bildschirmfüllend, fix.
+       xMin: das Blatt liegt am linken Bildschirmrand an, übrige Breite fällt
+       nach rechts — dort, wo im Editor ohnehin die Bedienspalte steht. -->
   <div class="stage" id="stage">
-    <svg id="facade" viewBox="0 0 1160 800" preserveAspectRatio="xMidYMid meet" aria-label="Generative Fassade">
+    <svg id="facade" viewBox="0 0 1160 800" preserveAspectRatio="xMinYMid meet" aria-label="Generative Fassade">
       <g id="layer-grid"></g>
       <g id="layer-els"></g>
       <g id="layer-ui"></g>

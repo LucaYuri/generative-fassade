@@ -107,7 +107,10 @@ js/main.js        Landing Page, Scroll → Animation
 ```
 
 Die Fassade ist ein SVG mit fixem Koordinatensystem von **1160 × 800**
-(gleiches Format wie die Vorlage) und skaliert mit dem Fenster.
+(gleiches Format wie die Vorlage) und skaliert mit dem Fenster. Das Blatt
+liegt am **linken** Bildschirmrand an (`preserveAspectRatio="xMinYMid meet"`),
+überschüssige Breite fällt nach rechts — dorthin, wo im Editor die
+Bedienspalte steht. Damit reicht auch das Raster bis an den linken Rand.
 Die Bausteine liegen auf 64 % ihrer Originalgrösse — so wie in der Vorlage.
 
 Neue Bausteine kommen in `js/assets.js` dazu: Pfade und Masse in `GF.SHAPES`,
